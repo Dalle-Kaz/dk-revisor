@@ -29,7 +29,7 @@ Config.Command = { -- Command settings
 Config.Rules = { -- Relger scriptet føgler
     WashEmployees = false, -- Om man kan hvaske andre revisors penge.
     WashOwn = true, -- Om man kan hvaske sin egen penge.
-    MaxPercentage = 50 -- Det max procent tal en revisor kan tage
+    MaxPercentage = 50, -- Det max procent tal en revisor kan tage
 }
 
 ------------------------------------------------------------

@@ -35,7 +35,7 @@ end
 
 function openTablet()
 	local hasjob = lib.callback.await('dalle:jobcheck', false)
-	if hasjob then
+	if hasjob == Config.job then
 		Tablet()
 
 		local input = lib.inputDialog("Revisor Menu", {
