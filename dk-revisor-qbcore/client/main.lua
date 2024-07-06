@@ -15,7 +15,7 @@ if Config.usecommand then
 		else
 			QBCore.Functions.Notify(Config.Lang['perm_error'], 'error', 5000)
 		end
-	end, false)
+	end)
 end
 
 if Config.UsingQbTarget then
