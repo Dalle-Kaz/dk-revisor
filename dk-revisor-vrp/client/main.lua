@@ -61,7 +61,7 @@ function Tablet()
 	tabletObject = CreateObject(GetHashKey("prop_cs_tablet"), GetEntityCoords(playerPed), 1, 1, 1)
 	AttachEntityToEntity(tabletObject,playerPed,GetPedBoneIndex(playerPed, 28422),0.0,0.0,0.03,0.0,0.0,0.0,1,1,0,1,0,1)
 	while not HasAnimDictLoaded(dict) do
-		Citizen.Wait(100)
+		Wait(100)
 	end
 	if not IsEntityPlayingAnim(playerPed, dict, "base", 3) then
 		TaskPlayAnim(playerPed, dict, "base", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
@@ -72,9 +72,9 @@ function RemoveTablet()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
 	if DoesObjectOfTypeExistAtCoords(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), true) then
-		spike = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), false, false, false)
-		SetEntityAsMissionEntity(spike, true, true)
-		DeleteObject(spike)
+		tablet = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), false, false, false)
+		SetEntityAsMissionEntity(tablet, true, true)
+		DeleteObject(tablet)
 		ClearPedTasks(ped)
 	end
 end

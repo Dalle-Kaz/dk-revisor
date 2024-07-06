@@ -5,6 +5,7 @@ if Config.usecommand then
 	RegisterCommand(Config.command.command, function(source, args)
 		local Player = QBCore.Functions.GetPlayerData()
 		local jobName = Player.job.name
+
 		if jobName == Config.job then
 			if Config.command.NeedsToBeInZone then
 				ZoneCheck()
@@ -19,18 +20,17 @@ end
 
 if Config.UsingQbTarget then
 	for index, coords in pairs(Config.OpenPlaces) do
-		exports['qb-target']:AddBoxZone("Revisor_"..index, coords, 2, 3, {
-			name = "Revisor_"..index,
-			heading = 0,
-			debugPoly = false,
-			}, {
-			options = {
+		exports['qb-target']:AddBoxZone("Revisor_" .. index, coords, 2, 3, 
+			{
+				name = "Revisor_" .. index,
+				heading = 0,
+				debugPoly = false,
+			}, 
+			{ options = {
 				{
 					icon = "fas fa-sign-in-alt",
 					label = Config.Lang['open_accountant'], 
-					action = function()
-						openmenu()
-					end,
+					action = function() openmenu() end
 				},
 			},
 			distance = 2.5
@@ -40,46 +40,82 @@ end
 
 function openmenu()
 	local Player = QBCore.Functions.GetPlayerData()
-	local jobName = Player.job.name
 
-	if not lib.progressActive() then
-		if jobName == Config.job then
+	if not lib.progressActive() then -- If the player doesnt have a progress active then --
+		if Player.job.name == Config.job then -- Player has the job --
+			local input = nil
+
+			if Config.Roles.ClosestPlayers then -- Roles thingy -- 
+				local PlayersForInput = lib.callback.await('dalle:playerinfo', false, QBCore.Functions.GetPlayersFromCoords(GetEntityCoords(PlayerPedId()), 5.0))
+				
+				if PlayersForInput then
+					input = lib.inputDialog(Config.Lang['accountant_menu_title'], {
+						{
+							type = "number",
+							label = Config.Lang['money_ammount'],
+							description =  Config.Lang['money_ammount_bio'],
+							min = 1,
+							default = 0,
+							icon = "sack-dollar",
+						}, 
+						{
+							type = "select",
+							label = Config.Lang['id_players'],
+							description = Config.Lang['id_players_bio'],
+							icon = "id-card",
+							options = PlayersForInput,
+						},
+						{
+							type = "number",
+							label = Config.Lang['take_procent'],
+							description = Config.Lang['take_procent_bio'],
+							max = 50,
+							min = 0,
+							default = 0,
+							icon = "percent",
+						}, 
+					})
+				else
+					return QBCore.Functions.Notify(Config.Lang['invalid_space'], 'error', 5000)
+				end
+			else
+				input = lib.inputDialog(Config.Lang['accountant_menu_title'], {
+					{
+						type = "number",
+						label = Config.Lang['money_ammount'],
+						description =  Config.Lang['money_ammount_bio'],
+						min = 1,
+						default = 0,
+						icon = "sack-dollar",
+					}, 
+					{
+						type = "number",
+						label = Config.Lang['id_players'],
+						description = Config.Lang['id_players_bio'],
+						min = 1,
+						default = 1,
+						icon = "id-card",
+					},
+					{
+						type = "number",
+						label = Config.Lang['take_procent'],
+						description = Config.Lang['take_procent_bio'],
+						max = 50,
+						min = 0,
+						default = 0,
+						icon = "percent",
+					}, 
+				})
+			end
+
 			Tablet()
-			local input = lib.inputDialog(Config.Lang['accountant_menu_title'], {
-				{
-					type = "number",
-					label = Config.Lang['money_ammount'],
-					description =  Config.Lang['money_ammount_bio'],
-					min = 1,
-					default = 0,
-					icon = "sack-dollar",
-				}, 
-				{
-					type = "number",
-					label = Config.Lang['id_players'],
-					description = Config.Lang['id_players_bio'],
-					min = 1,
-					default = 1,
-					icon = "id-card",
-				},
-				{
-					type = "number",
-					label = Config.Lang['take_procent'],
-					description = Config.Lang['take_procent_bio'],
-					max = 50,
-					min = 0,
-					default = 0,
-					icon = "percent",
-				}, 
-			})
-
 
 			if not input then
-				if Config.command.NeedsToBeInZone then
-					coords = false
-				end
+				if Config.command.NeedsToBeInZone then coords = false end
+
 				QBCore.Functions.Notify(Config.Lang['invalid_space'], 'error', 5000)
-				return RemoveTablet()
+
+				--return RemoveTablet()
 			elseif input then
 				local playeronline = lib.callback.await('revisor:playeronline', false, input[2])
 				
@@ -94,17 +130,7 @@ function openmenu()
 					durationTime = Config.MaxTime
 				end
 
-				if lib.progressCircle({
-					duration = durationTime,
-					position = 'bottom',
-					useWhileDead = false,
-					canCancel = true,
-					disable = {
-						combat = true,
-						car = true,
-						move = true,
-					},
-				}) then
+				if lib.progressCircle({ duration = durationTime, position = 'bottom', useWhileDead = false, canCancel = true, disable = { combat = true, car = true, move = true, } }) then
 					local washed = lib.callback.await('revisor:Hvidevask-Penge', false, input[1], input[2], input[3])
 					if Config.command.NeedsToBeInZone then
 						coords = false
@@ -119,18 +145,22 @@ function openmenu()
 	else
 		QBCore.Functions.Notify(Config.Lang['proccessing_error'], 'error', 5000)
 	end	
+
 	RemoveTablet()
 end
 
 function Tablet()
 	local playerPed = PlayerPedId()
 	local dict = "amb@world_human_seat_wall_tablet@female@base"
+
 	RequestAnimDict(dict)
 	tabletObject = CreateObject(GetHashKey("prop_cs_tablet"), GetEntityCoords(playerPed), 1, 1, 1)
-	AttachEntityToEntity(tabletObject,playerPed,GetPedBoneIndex(playerPed, 28422),0.0,0.0,0.03,0.0,0.0,0.0,1,1,0,1,0,1)
+	AttachEntityToEntity(tabletObject, playerPed, GetPedBoneIndex(playerPed, 28422), 0.0, 0.0, 0.03, 0.0, 0.0, 0.0, 1, 1, 0, 1, 0, 1)
+
 	while not HasAnimDictLoaded(dict) do
-		Citizen.Wait(100)
+		Wait(100)
 	end
+
 	if not IsEntityPlayingAnim(playerPed, dict, "base", 3) then
 		TaskPlayAnim(playerPed, dict, "base", 8.0, 1.0, -1, 49, 1.0, 0, 0, 0)
 	end
@@ -139,10 +169,11 @@ end
 function RemoveTablet()
 	local ped = PlayerPedId()
 	local coords = GetEntityCoords(ped)
+
 	if DoesObjectOfTypeExistAtCoords(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), true) then
-		spike = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), false, false, false)
-		SetEntityAsMissionEntity(spike, true, true)
-		DeleteObject(spike)
+		tablet = GetClosestObjectOfType(coords.x, coords.y, coords.z, 0.9, GetHashKey("prop_cs_tablet"), false, false, false)
+		SetEntityAsMissionEntity(tablet, true, true)
+		DeleteObject(tablet)
 		ClearPedTasks(ped)
 	end
 end
@@ -160,6 +191,7 @@ function ZoneCheck()
 			return
 		end
 	end
+
 	if coords == false then
 		QBCore.Functions.Notify(Config.Lang['location_error'], 'error', 5000)
 	end

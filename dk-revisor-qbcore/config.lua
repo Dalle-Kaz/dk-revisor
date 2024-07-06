@@ -25,6 +25,10 @@ Config.OpenPlaces = { -- Steder hvor du kan åbne menuen, med Qbtarget hvis den 
     vector3(-72.5693, -814.1973, 243.3860),
 }
 
+Config.Roles = {
+    ClosestPlayers = true, -- Get all the closest players instead of the player chosing the player with using their server ID --
+}
+
 -- ENGLISH
 Config.Lang = { 
     ['accountant'] = 'Accountant',

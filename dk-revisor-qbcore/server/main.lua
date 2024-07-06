@@ -43,6 +43,8 @@ lib.callback.register('revisor:Hvidevask-Penge', function(source, antalPenge, id
     return false
 end)
 
+
+-- Dont fucking know why this --
 lib.callback.register('revisor:playeronline', function(source, idPaaPerson)
     local player = QBCore.Functions.GetPlayer(idPaaPerson)
 
@@ -52,6 +54,28 @@ lib.callback.register('revisor:playeronline', function(source, idPaaPerson)
 
     return false
 end)
+
+lib.callback.register('dalle:playerinfo', function(source, players)
+    if players then
+        local PlayersForInput = {}
+        for k, Player in pairs(players) do 
+            local PlayerData = QBCore.Functions.GetPlayer(Player)
+            
+            table.insert(PlayersForInput, {
+                value = Player
+                label = GetName(Player)
+            })
+        end
+        return PlayersForInput
+    end
+
+    return false
+end)
+
+function GetName(source)
+    local qPlayer = QBCore.Functions.GetPlayer(source)
+    return ("%s %s"):format(qPlayer.PlayerData.charinfo.firstname, qPlayer.PlayerData.charinfo.lastname)
+end
 
 function sendToDiscord(webhook, revisorid, amountToReceive, idPaaPerson, amountForRevisor, antalPenge)
     local embed = {
