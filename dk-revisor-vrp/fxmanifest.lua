@@ -19,7 +19,3 @@ server_scripts{
   "@vrp/lib/utils.lua", 
   "server/main.lua"
 }
-
-escrow_ignore {
-  "config.lua"
-}

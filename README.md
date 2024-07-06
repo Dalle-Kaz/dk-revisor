@@ -1,3 +1,5 @@
-# dk-revisor
+# DK-Revisor
 
-Lavet af dalle(Gider ikke at skrive mere!) 
+Lavet af dalle far(Gider ikke at skrive mere!) 
+
+**OBS** Esx versionen er ikke lavet endnu
