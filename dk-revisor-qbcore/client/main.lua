@@ -45,7 +45,7 @@ function openmenu()
 		if Player.job.name == Config.job then -- Player has the job --
 			local input = nil
 
-			if Config.Roles.ClosestPlayers then -- Roles thingy -- 
+			if Config.Rules.ClosestPlayers then -- Rules thingy -- 
 				local PlayersForInput = lib.callback.await('dalle:playerinfo', false, QBCore.Functions.GetPlayersFromCoords(GetEntityCoords(PlayerPedId()), 5.0))
 				
 				if PlayersForInput then
