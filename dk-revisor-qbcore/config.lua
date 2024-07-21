@@ -25,7 +25,7 @@ Config.OpenPlaces = { -- Steder hvor du kan åbne menuen, med Qbtarget hvis den 
     vector3(-72.5693, -814.1973, 243.3860),
 }
 
-Config.Roles = {
+Config.Rules = {
     ClosestPlayers = false, -- Get all the closest players instead of the player chosing the player with using their server ID -- Not testet
     WashEmployees = false, -- Om man kan hvaske andre revisors penge.
     WashOwn = true, -- Om man kan hvaske sin egen penge.
