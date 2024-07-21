@@ -6,12 +6,12 @@ lib.callback.register('revisor:Hvidevask-Penge', function(source, antalPenge, id
     local revisor = QBCore.Functions.GetPlayer(source)
             
 
-    if player.license  == revisor.license then 
+    if player.license  == revisor.license and not Config.Rules.WashOwn then 
         TriggerClientEvent('QBCore:Notify', source, Config.Lang['you_are_accountant_error'], "error", 5000)
         return
     end
     
-    if revisor.PlayerData.job.name == Config.job then
+    if revisor.PlayerData.job.name == Config.job and not Config.Rules.WashEmployees then
         TriggerClientEvent('QBCore:Notify', source, Config.Lang['person_is_accountant_error'], "error", 5000)
         return
     end

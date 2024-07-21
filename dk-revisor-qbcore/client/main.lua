@@ -69,7 +69,7 @@ function openmenu()
 							type = "number",
 							label = Config.Lang['take_procent'],
 							description = Config.Lang['take_procent_bio'],
-							max = 50,
+							max = Config.Rules.MaxPercentage,
 							min = 0,
 							default = 0,
 							icon = "percent",

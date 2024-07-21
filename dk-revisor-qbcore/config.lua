@@ -26,7 +26,10 @@ Config.OpenPlaces = { -- Steder hvor du kan åbne menuen, med Qbtarget hvis den 
 }
 
 Config.Roles = {
-    ClosestPlayers = true, -- Get all the closest players instead of the player chosing the player with using their server ID --
+    ClosestPlayers = false, -- Get all the closest players instead of the player chosing the player with using their server ID -- Not testet
+    WashEmployees = false, -- Om man kan hvaske andre revisors penge.
+    WashOwn = true, -- Om man kan hvaske sin egen penge.
+    MaxPercentage = 50 -- Det max procent tal en revisor kan tage
 }
 
 -- ENGLISH
